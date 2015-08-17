@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AplicacionNotificacionArriendo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="GadGet Arriendo" Height="350" Width="525" Icon="Resources/iconoSistemaPNG.png" ResizeMode="NoResize" Closing="MainWindow_OnClosing">
     <Grid>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="34,63,0,0" VerticalAlignment="Top" Width="75" Click="ButtonBase_OnClick"/>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="ButtonBase_OnClick"/>
 
     </Grid>
 </Window>

@@ -37,7 +37,7 @@
                     <BeginStoryboard x:Name="FadeInStoryBoard">
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="NotificationWindow" From="0.01" To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:2"/>
-                            <DoubleAnimation Storyboard.TargetName="NotificationWindow" From="1" To="0" Storyboard.TargetProperty="Opacity" Duration="0:0:2" BeginTime="0:0:6"/>
+                            <DoubleAnimation Storyboard.TargetName="NotificationWindow" From="1" To="0" Storyboard.TargetProperty="Opacity" Duration="0:0:2" BeginTime="0:0:15"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>

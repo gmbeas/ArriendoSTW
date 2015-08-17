@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,8 +36,8 @@ namespace AplicacionNotificacionArriendo
         private const double TopOffset = 20.0;
         private const double LeftOffset = 480.0;
         private DateTime _ultimafecha;
-       
-        
+
+        private bool cierra = false;
 
         public MainWindow()
         {
@@ -51,8 +52,9 @@ namespace AplicacionNotificacionArriendo
             double width = workArea.Width;
             double num = left + width - 480.0;
             growlNotifiactions.Left = num;
+
             this._icon.Visible = true;
-            this._icon.Icon = Resource1.program_defaults;
+            this._icon.Icon = Resource1.iconoSistema;
             this._icon.ContextMenu = new System.Windows.Forms.ContextMenu();
             this._icon.ContextMenu.MenuItems.Add("Maximizar Ventana");
             this._icon.ContextMenu.MenuItems.Add("Minimizar Ventana");
@@ -67,7 +69,7 @@ namespace AplicacionNotificacionArriendo
             this.modeloConfig.HoraAlarma = iniFile.Read("HoraAlarma", "General");
             this.modeloConfig.Intervalo = int.Parse(iniFile.Read("Intervalo", "General"));
             this.modeloConfig.HoraFin = iniFile.Read("HoraFinAlarma", "General");
-            BackgroundWorker backgroundWorker = new BackgroundWorker()
+            var backgroundWorker = new BackgroundWorker()
             {
                 WorkerReportsProgress = true
             };
@@ -84,8 +86,10 @@ namespace AplicacionNotificacionArriendo
 
         private void icon_Salir(object sender, EventArgs e)
         {
+            cierra = true;
             this.Close();
             this._icon.Dispose();
+
         }
 
         private void icon_DoubleClick(object sender, EventArgs e)
@@ -105,11 +109,14 @@ namespace AplicacionNotificacionArriendo
 
         private void Window1_Closed(object sender, EventArgs e)
         {
-            this._icon.Dispose();
+            this.Hide();
+            this.WindowState = WindowState.Minimized;
         }
 
+
+
         protected override void OnClosed(EventArgs e)
-        {
+        {  
             this._growlNotifications.Close();
             base.OnClosed(e);
         }
@@ -134,11 +141,15 @@ namespace AplicacionNotificacionArriendo
                 else
                 {
                     this._visto = 1;
-                    dateTime2 = this._ultimafecha.AddMinutes((double)this.modeloConfig.Intervalo);
+                    dateTime2 = this._ultimafecha.AddMinutes(this.modeloConfig.Intervalo);
                 }
-                string date = string.Format("{0:d/M/yyyy HH:mm:ss}", (object)DateTime.Now);
+
+                string date = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now);
+
                 if (Convert.ToDateTime(date) == dateTime2 && this._visto == 1)
                 {
+                    _tipo = 2;
+                    _ultimafecha = Convert.ToDateTime(date);
                     this.Dispatcher.Invoke(
                       // Anonymous delegate that calls SetValue on the Window thread
                       (Action)delegate () {
@@ -173,6 +184,22 @@ namespace AplicacionNotificacionArriendo
             public int Intervalo { get; set; }
 
             public string HoraFin { get; set; }
+        }
+       
+
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            if (cierra == false)
+            {
+                this._icon.ContextMenu.MenuItems[1].Enabled = false;
+                this._icon.ContextMenu.MenuItems[0].Enabled = true;
+                e.Cancel = true;
+
+                this.ShowInTaskbar = false;
+
+                this.WindowState = WindowState.Minimized;
+            }
+            
         }
     }
 }
