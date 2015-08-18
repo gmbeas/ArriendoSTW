@@ -56,6 +56,7 @@ namespace AplicacionNotificacionArriendo
             this._icon.Visible = true;
             this._icon.Icon = Resource1.iconoSistema;
             this._icon.ContextMenu = new System.Windows.Forms.ContextMenu();
+            this._icon.Text = @"ARRIENDO ;)";
             this._icon.ContextMenu.MenuItems.Add("Maximizar Ventana");
             this._icon.ContextMenu.MenuItems.Add("Minimizar Ventana");
             this._icon.ContextMenu.MenuItems.Add("Salir");
@@ -86,9 +87,18 @@ namespace AplicacionNotificacionArriendo
 
         private void icon_Salir(object sender, EventArgs e)
         {
-            cierra = true;
-            this.Close();
-            this._icon.Dispose();
+            string repeatPassword = MyDialog.Prompt("Ingrese Contraseña", "Confirmar para salir", inputType: MyDialog.InputType.Password);
+            if (repeatPassword != null)
+            {
+                if (repeatPassword == "A1b1c1d1")
+                {
+                    cierra = true;
+                    this.Close();
+                    this._icon.Dispose();
+                }
+               
+            }
+           
 
         }
 
